@@ -9,19 +9,16 @@ class Challenge3(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome("../chromedriver")
         self.driver.implicitly_wait(20)
+        print("Go to Copart.")
+        # Load page
+        self.driver.get("https://www.copart.com")
+        self.assertIn("Copart", self.driver.title)
 
     def tearDown(self):
         self.driver.close()
 
 
     def test_challenge_3_for_loop(self):
-
-        print("Go to Copart.")
-        # Load page
-        self.driver.get("https://www.copart.com")
-        self.assertIn("Copart", self.driver.title)
-
-
         # Find list of trending makes and models
         print("Get popular models.")
         cars = self.driver.find_elements(By.XPATH, '//*[@ng-if="popularSearches"]//a')
@@ -29,11 +26,6 @@ class Challenge3(unittest.TestCase):
             print(car.text + " - " + car.get_attribute("href"))
 
     def test_challenge_3_while_loop(self):
-        print("Go to Copart.")
-        # Load page
-        self.driver.get("https://www.copart.com")
-        self.assertIn("Copart", self.driver.title)
-
         # Find popular categories
         print("Get popular categories.")
         categories = self.driver.find_elements(By.XPATH, '//*[@ng-if="popularSearches"]/../div[3]//a')
