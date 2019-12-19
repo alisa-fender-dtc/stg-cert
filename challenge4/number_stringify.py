@@ -3,7 +3,7 @@ place_words_teens = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen
                      "nineteen"]
 place_words_sub_hundred = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
 
-place_words_hundred_plus = ["", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
+place_words_thousand_plus = ["", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion",
                             "sextillion", "septillion", "octillion", "nonillion", "decillion", "undecillion",
                             "duodecillion", "undecillion", "duodecillion", "tredecillion", "quattuordecillion",
                             "quindecillion", "sexdecillion", "septendecillion", "octodecillion", "novemdecillion",
@@ -32,18 +32,18 @@ def stringify(number):
     for place in number_map.keys():
 
         number_list = number_map[place]
-        sub_hundred_string = _build_sub_hundred_number(number_list)
+        sub_hundred_string = _build_sub_thousand_number(number_list)
         if place == 0:
             number_string = sub_hundred_string
         else:
-            if place >= len(place_words_hundred_plus):
-                place = len(place_words_hundred_plus) - 1
-            number_string = sub_hundred_string + " " + place_words_hundred_plus[place] + " " + number_string
+            if place >= len(place_words_thousand_plus):
+                place = len(place_words_thousand_plus) - 1
+            number_string = sub_hundred_string + " " + place_words_thousand_plus[place] + " " + number_string
 
     return (number_string)
 
 
-def _build_sub_hundred_number(number_list):
+def _build_sub_thousand_number(number_list):
     """Internal function: Converts a number from 0-999 to the words for those numbers.
     e.g. [3, 5, 4] converts to three hundred fifty four
 
