@@ -1,6 +1,8 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from common.screenshot import screenshot
+from common.slingqa_utils import utils
 from time import sleep
 
 from common.navigate_to import navigate_to
@@ -9,7 +11,7 @@ class Challenge7(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome("../chromedriver")
-        self.driver.implicitly_wait(20)
+        self.driver.implicitly_wait(10)
         print("Go to Copart.")
         # Load page
         self.driver.get("https://www.copart.com")
@@ -20,32 +22,49 @@ class Challenge7(unittest.TestCase):
         self.driver.close()
 
 
-    def test_challenge_3_for_loop(self):
 
-        ## Make try except block
+    def test_challenge_7_copart_popular_items(self):
 
-        # Find list of trending makes and models
-        print("Get popular models.")
-        nav = navigate_to(self.driver)
-        cars = self.driver.find_elements(By.XPATH, '//*[@id="tabTrending"]//a')
-        for car in cars:
-            url = car.get_attribute("href")
-            if nav.go_to(url):
-                pass
-            else:
-                pass
+        try:
+            shooter = screenshot(self.driver)
+            util = utils()
 
-    def test_challenge_3_while_loop(self):
-        # Find popular categories
-        print("Get popular categories.")
-        categories = self.driver.find_elements(By.XPATH, '//*[@ng-if="popularSearches"]/../div[3]//a')
+            print("Get popular searches.")
+            nav = navigate_to(self.driver)
+            elements = self.driver.find_elements(By.XPATH, '//*[@id="tabTrending"]//a')
 
-        indexes = len(categories)
+            #Making url map to prevent elements list from going stale
+            url_map = {}
+            for element in elements:
+                url = element.get_attribute("href")
+                verify_text = element.text
+                url_map[url] = verify_text
 
-        i=0
-        while i < indexes:
-            print(categories[i].text + " - " + categories[i].get_attribute("href"))
-            i+=1
+            for url in url_map.keys():
+                try:
+                    destination_url = "unset"
+                    verify_text = url_map[url]
+                    test_name = util.convert_to_file_name_string(["copart_popular_items", "_", verify_text])
+                    print("Navigating to {} to look for {}.".format(url, verify_text))
+
+                    navigate_success = nav.go_to(url, verify_text)
+                    destination_url = self.driver.current_url
+
+                    if navigate_success:
+                        print("PASS: Origin url: {}. Destination url {} contains text {}.".format(url, destination_url, verify_text))
+                    else:
+                        print("FAIL: Origin url: {}. Destination url {} does not contain text {}.".format(url, destination_url, verify_text))
+                        shooter.take_screenshot(test_name)
+                except Exception as e:
+                    print("FAIL: Excepted. Origin url {}. Destination url {}".format(url, destination_url))
+                    shooter.take_screenshot(test_name)
+                    print(e)
+        except Exception as e:
+            print("FAIL: Excepted. Origin url {}. Destination url {}".format(url, destination_url))
+            shooter.take_screenshot(test_name)
+            print(e)
+
+
 
 
 
