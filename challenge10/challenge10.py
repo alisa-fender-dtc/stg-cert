@@ -3,7 +3,7 @@ from copart_api.search.search_api import SearchAPI
 from pydantic import ValidationError
 from copart_api.search.input_spreadsheet import InputSpreadsheet
 
-class challenge8(unittest.TestCase):
+class challenge10(unittest.TestCase):
 
     def test_copart_search_api(self):
         search_input_file = 'search_input.xlsx'
